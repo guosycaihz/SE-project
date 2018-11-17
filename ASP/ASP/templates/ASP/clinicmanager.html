@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        .description {
+            padding: 5px;
+            border-style: solid;
+            border-color: deepskyblue;
+        }
+        div {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+        <!-- Two images at the top of the page -->
+    <div>
+       <img src="media/label.jpg" class="img-rounded" height="178" width="602"/>
+    </div>
+
+    <div class="text-right">
+        <form action="/asp/logout" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">logout</button>
+        </form>
+    </div>
+
+    <div class="row">
+    <!-- Left part of the page -->
+    <!-- User infomation -->
+    <!-- Not Implemented yet-->
+    <div class="col-lg-2">
+        <div>
+            <a href="/asp/cm_view_order"><button class="btn btn-warning">View My Order</button></a>
+        </div>
+    </div>
+
+    <!-- Middle part of the page-->
+    <!-- Display all medicine with images and infomation-->
+    <div class="col-lg-9">
+        <form >
+            {% csrf_token %}
+            <h4>Hello, {{ user }} </h4><br>
+            <div class="form-group">
+                <label>Search: </label>
+                <input type="text" class="form-control" name="search" placeholder="not yet done">
+            </div>
+        </form>
+        <br><h4 class="text-info">Weight for the order should be lees than 23.8kg</h4><br>
+        <form name="orderForm" action="/asp/cm_add_order" method="post" onsubmit="return complete()">
+            {% csrf_token %}
+            <!-- supply_list and image-->
+            {% for medicine in medicinesupply_list %}
+                {% if forloop.last %}
+                    <input type="hidden" name="no_of_item" value="{{ forloop.counter }}">
+                {% endif %}
+            <div style="width: 30%; float:left ">
+                <div>
+                    <img class="img-responsive" src= "{{ medicine.image.url }}" >
+                </div>
+                <div class="well form-group">
+                    <label>Detail:</label><br>
+                    <label>{{ medicine.name }}</label><br>
+                    <label>{{ medicine.hospital }}</label><br>
+                    <label>{{ medicine.weight }}</label><br>
+                    <input type="hidden" name="id{{ forloop.counter }}" value="{{ medicine.id }}">
+                    <input type="hidden" name="name{{ forloop.counter }}" value="{{ medicine.name }}">
+                    <input type="hidden" name="weight{{ forloop.counter }}" value="{{ medicine.weight }}">
+                    <input class="form-control" name="amount{{ forloop.counter }}" type="number" min="0" max="30">
+                </div>
+            </div>
+            {% empty %}
+                No medicine supply.
+            {% endfor %}
+            <br>
+            <!-- Bottom part of the page -->
+            <!-- For user to select the priority and submit the order -->
+            <div style="width: 100%; float: left">
+                Select Priority:
+                <select class="form-control" name="priority" style="width: 100px">
+                    <option value="3" selected>High</option>
+                    <option value="2">Medium</option>
+                    <option value="1">Low</option>
+                </select>
+            </div>
+
+            <div style="float: right">
+                <button class="btn btn-info" type="submit">Order now!</button>
+            </div>
+        </form>
+    </div>
+</div>
+    <script>
+        function complete() {
+            var no_of_item = document.forms['orderForm']['no_of_item'].value;
+            var weight = 0;
+            for (var i = 1; i <= no_of_item; i++) {
+                var itemWeight = document.forms['orderForm']['weight'+i].value;
+                var itemQuantity = document.forms['orderForm']['amount'+i].value;
+                weight += itemQuantity * itemWeight;
+            }
+            if (weight > 23.8) {
+                alert("Weight exceed loading capacity! total weight = "+ weight + "kg");
+                return false;
+            }
+
+
+            <!-- weight < 23.8 -->
+            alert("total weight = "+ weight + "kg\n" + "Request received, System is processing...")
+        }
+    </script>
+</body>
+</html>

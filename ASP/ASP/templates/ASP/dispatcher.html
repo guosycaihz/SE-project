@@ -1,0 +1,46 @@
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<div class="container">
+    <img src="media/label.jpg" class="img-rounded" height="178" width="602"/>
+    <form action="/asp/logout" method="post">
+        {% csrf_token %}
+        <button style="float: right" type="submit" class="btn btn-danger">logout</button>
+    </form>
+</div>
+<div>
+    <h1 class="text-center bg-primary">AIR SUPPLY    For dispatchers</h1>
+</div>
+
+<!-- display orders -->
+<div class="container">
+            <form action="/asp/dp_generate_csv" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-info">Generate CSV</button>
+            </form>
+            <h2>Orders To Go</h2>
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>Priority</th>
+                <th>Address</th>
+                <th>Weight</th>
+                <th>To Dispatch</th>
+            </tr>
+        {% for order in order_list %}
+        <tr class="Active">
+            <td>{{ order.priority }}</td>
+            <td>{{ order.location }}</td>
+            <td>{{ order.weight }}</td>
+            <td>
+                <form action="/asp/dp_update_order" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="order" value="{{ order.id }}">
+                    <button type="submit" class="btn btn-success">Dispatch</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+            <tr><td>No order.</td></tr>
+        {% endfor %}
+        </table>
+</div>

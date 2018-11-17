@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+        <img src="media/label.jpg" class="img-rounded" height="178" width="602"/>
+    <div class="container">
+        <p>
+            <pre>
+            We sent you an email with a <strong>token</strong> to your registration email address.<br>
+            Please enter the <strong>token</strong> below <mark>within 60 seconds</mark><br>
+            If you run into any problems, click ‘report’or ‘send again’.<br>
+            </pre>
+        </p>
+        <form name="emailForm" action="/asp/send_token" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Email address</label>
+                <input class="form-control" type="text" name="email">
+            </div>
+            <button class="btn btn-info" type="submit" name="send">Send</button>
+        </form>
+
+        <form name="tokenForm" action="/asp/verify_token" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Enter token</label>
+                <input class="form-control" type="text" name="token">
+            </div>
+            <button class="btn btn-info" type="submit" name="send">Verify</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
