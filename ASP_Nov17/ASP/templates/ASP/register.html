@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div>
+        <img src="media/label.jpg" class="img-rounded" height="178" width="602"/>
+    </div>
+    <div class="table-responsive">
+        <form name="userInfo" method="post" action="/asp/register_create" onsubmit="return validateInfo()">
+            {% csrf_token %}
+            <table class="table">
+                <tr>
+                    <td><label>User name *</label></td>
+                    <td><input class="form-control" type="text" name="username"></td>
+                    <td><label>User Type</label></td>
+                    <td>
+                        <select class="form-control" name="role">
+                            <option value="CM" selected>Clinic Manager</option>
+                            <option value="WP">Warehouse personnel</option>
+                            <option value="DP">Dispatcher</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>First Name</label></td>
+                    <td><input class="form-control" type="text" name="first_name"></td>
+                    <td><label>Clinic<br>(for CM only)</label></td>
+                    <td>
+                        <select class="form-control" name="location">
+                            {% for clinic in location_list %}
+                            <option value="{{ clinic.id }}">{{ clinic.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Last Name</label></td>
+                    <td><input class="form-control" type="text" name="last_name"></td>
+                    <td><label>Email<br>(Set by default)</label></td>
+                    <!-- email should be auto-fill -->
+                    <td><label>xxxxx@asp.com</label></td>
+                </tr>
+                <tr>
+                    <td><label>Password *</label></td>
+                    <td><input class="form-control" type="password" name="password"></td>
+                    <td rowspan="2"><label>User agreements</label></td>
+                    <td rowspan="2">
+                        <div class="well"><!--style="overflow: scroll; height: 100px"-->
+                            <p class="form-control-static">Agreements...</p>
+                            <br>
+                            <div class="radio-inline">
+                                <label><input type="radio" name="agreement" value="agree">agree</label>
+                            </div>
+                            <div class="radio-inline">
+                                <label><input type="radio" name="agreement" value="disagree">disagree</label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Re-enter<br>Password*</label></td>
+                    <td><input class="form-control" type="password" name="reEnter"></td>
+                </tr>
+            </table>
+            <button class="btn btn-info" type="submit">Confirm and Submit</button>
+        </form>
+    </div>
+</div>
+<script>
+    function validateInfo() {
+        var agreement = document.forms["userInfo"]["agreement"].value;
+        if (agreement != "agree") {
+            alert("You should agree the user agreements for registration!");
+            return false;
+        }
+        var role = document.forms["userInfo"]["role"].value
+        var clinic = document.forms["userInfo"]["location"].value;
+        if (role == "CM" && clinic == "") {
+            alert("You should select a clinic!");
+            return false;
+        }
+        var username = document.forms["userInfo"]["username"].value;
+        if (username == "") {
+            alert("Please fill in your user name!")
+            return false;
+        }
+        var fname = document.forms["userInfo"]["first_name"].value;
+        var lname = document.forms["userInfo"]["last_name"].value;
+        if (fname == "" || lname == "") {
+            alert("You should fill in your personal information.");
+            return false;
+        }
+        var security = document.forms["userInfo"]["security"].value;
+        var answer = document.forms["userInfo"]["answer"].value;
+        if (security == "" || answer == "") {
+            alert("Please fill security question and answer.");
+            return false;
+        }
+        var password = document.forms["userInfo"]["password"].value;
+        var reEnter = document.forms["userInfo"]["reEnter"].value;
+        if (password == "" || reEnter == "") {
+            alert("You should fill in password and re-Enter!");
+            return false;
+        } else if (password != reEnter) {
+            alert("You have re-Enter incorrect password");
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

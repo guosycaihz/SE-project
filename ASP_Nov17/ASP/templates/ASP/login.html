@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <img src="media/label.jpg" class="img-rounded" height="178" width="602"/>
+    </div>
+    <div class="container">
+        <h1 class="bg-primary text-center">User Login</h1>
+        <form name="login" method="post" action="/asp/login_validate" onsubmit="return validateLogin()">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>User Name</label>
+                <input type="text" class="form-control" name="username">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" name="password">
+            </div>
+            <button type="submit" name="Login" class="btn btn-default">Submit</button>
+        </form>
+        <br>
+        <span>
+            <form method="get" action="/asp/get_token">
+                {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-block btn-info">New User Registration</button>
+            </form>
+            <form>
+            <button type="submit" class="btn btn-primary btn-block btn-info">Forget Password?</button>
+            </form>
+        </span>
+    </div>
+<script>
+    function validateLogin() {
+        var username = document.forms["login"]["username"].value;
+        var password = document.forms["login"]["password"].value;
+        if (username == "") {
+            alert("Please fill in user name!");
+            return false;
+        }
+        if (password == "") {
+            alert("Please fill in password!");
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

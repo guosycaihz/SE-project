@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div>
+        <img src="media/label.jpg" class="img-rounded" height="178" width="602"/>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <!-- to other page -->
+        </div>
+        <div class="col-lg-9">
+            <h1>Manage My Account</h1>
+            <form name="manage" action="/asp/modify_account" method="post" onsubmit="return manageAccount()">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input class="form-control" type="text" name="first_name">
+                </div>
+                <div class="form-group">
+                    <label>Last name</label>
+                    <input class="form-control" type="text" name="last_name">
+                </div>
+                <div class="form-group">
+                    <label style="display: block">E-mail</label>
+                    <input style="width: 55%; display: inline-block" class="form-control" type="text" name="address">
+                    <label>@</label>
+                    <input style="width: 42%; display: inline-block" class="form-control" type="text" name="host">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input class="form-control" type="password" name="password">
+                </div>
+                <div class="form-group">
+                    <label>Re-enter password</label>
+                    <input class="form-control" type="password" name="re_password">
+                </div>
+                <button class="btn btn-info" type="submit">Confirm</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function manageAccount() {
+        var password = document.forms['manage']['password'].value;
+        var reEnter = document.forms['manage']['reEnter'].value;
+        if ( (password != "" && reEnter == "") || (password == "" && reEnter != "") ) {
+            alert("You should fill in password and re-Enter!");
+            return false;
+        } else if (password != "" && password != reEnter) {
+            alert("You have re-Enter incorrect password");
+            return false;
+        }
+        var address = document.forms['manage']['address'].value;
+        var host = document.forms['manage']['host'].value;
+        if ( (address != "" && host == "") || (address == "" && host != "") ) {
+            alert("You should input a valid email address");
+            return false;
+        }
+        var first_name = document.forms['manage']['first_name'].value;
+        var last_name = document.forms['manage']['last_name'].value;
+        if (password == "" && reEnter == "" && address == "" && host == "" && first_name == "" && last_name == "") {
+            alert("You should enter something");
+            return false;
+        }
+    }
+</script>
+</body>
+</html>
